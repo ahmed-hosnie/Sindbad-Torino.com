@@ -1,0 +1,195 @@
+@import "tailwindcss" source(none);
+@import "./extras.css";
+@source "../public/index.html";
+@source "../public/menu.js";
+
+@theme {
+  --color-forest: #0f5132;
+  --color-pine: #123c2b;
+  --color-cream: #f4f6f0;
+  --color-paper: #fcfdf9;
+  --color-ink: #162a20;
+  --color-muted: #4b6053;
+  --color-line: #d6dfd3;
+  --font-display: "Marcellus", Georgia, serif;
+  --font-arabic: "Cairo", Tahoma, sans-serif;
+}
+
+:root {
+  --gutter: clamp(20px, 5.5vw, 72px);
+  --width: 1180px;
+}
+
+@layer base {
+  html { @apply motion-safe:scroll-smooth; }
+  body { @apply bg-cream text-ink font-sans text-base leading-relaxed antialiased; }
+  [lang="ar"] body { @apply font-arabic; }
+  section[id], footer[id] { scroll-margin-block-start: 24px; }
+  a, button, input, select, summary { @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current; }
+  button, summary { @apply cursor-pointer; }
+  button:disabled { @apply cursor-default opacity-60; }
+  h1, h2, h3, .brand-name { @apply font-display font-normal; }
+  [dir="rtl"] :is(h1, h2, h3):not([lang="it"] *) { @apply font-arabic font-bold; }
+  h2 { font-size: clamp(2rem, 4.5vw, 3.6rem); line-height: 1.12; }
+}
+
+@layer components {
+  .shell { width: min(calc(100% - var(--gutter) * 2), var(--width)); margin-inline: auto; }
+  .skip-link { @apply sr-only focus:not-sr-only focus:absolute focus:z-20 focus:bg-paper focus:p-3 focus:text-forest; }
+
+  .site-header { @apply bg-pine text-paper; }
+  .header-inner { @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:py-4; }
+  .brand { @apply col-start-1 row-start-1 inline-flex w-fit items-center gap-2.5; }
+  .brand-mark { @apply w-11 shrink-0 sm:w-13; filter: brightness(0) invert(1); }
+  .brand-name { @apply block text-3xl leading-none; }
+  .brand small { @apply mt-1 block text-[.62rem] leading-tight tracking-[.08em] text-cream/80; }
+  .main-nav { @apply col-span-full row-start-2 flex flex-wrap items-center gap-x-5 border-t border-cream/20 md:col-span-1 md:col-start-2 md:row-start-1 md:justify-center md:gap-x-6 md:border-0; }
+  .main-nav a { @apply inline-flex min-h-11 items-center text-sm font-semibold decoration-cream/60 underline-offset-8 hover:underline; }
+  .header-actions { @apply col-start-2 row-start-1 flex items-center justify-self-end gap-1.5 sm:gap-3 md:col-start-3; }
+  .language-picker label { @apply sr-only; }
+  .language-picker select { @apply min-h-11 max-w-full rounded-sm border border-cream/35 bg-pine px-2.5 text-sm text-paper; }
+
+  .hero { @apply relative overflow-hidden border-b border-line bg-cream; }
+  .hero::after {
+    content: "";
+    display: block;
+    height: 8px;
+    background: repeating-linear-gradient(90deg, var(--color-forest) 0 14px, transparent 14px 28px);
+    opacity: .72;
+  }
+  .hero-layout { @apply flex min-h-[490px] items-center py-13 sm:min-h-[530px] lg:min-h-[580px] lg:py-19; }
+  .hero-copy { @apply relative z-1; }
+  .eyebrow { @apply flex items-center gap-2.5 text-xs font-bold uppercase tracking-[.15em] text-forest; }
+  .eyebrow::before { content: ""; @apply h-px w-7 shrink-0 bg-current; }
+  [dir="rtl"] .eyebrow { letter-spacing: normal; }
+  .hero h1 { @apply mt-4 font-bold text-paper; max-width: min(100%, 800px); font-size: clamp(2.35rem, 5.1vw, 4.65rem); line-height: 1.04; text-wrap: balance; }
+  [dir="rtl"] .hero h1 { line-height: 1.24; max-width: 20ch; }
+  .intro { @apply mt-4 max-w-[44ch] text-base text-cream/95 sm:text-lg; }
+  .hero-actions { @apply mt-6 flex flex-wrap gap-2.5; }
+  .button {
+    @apply inline-flex min-h-12 items-center justify-center gap-3 rounded-sm border border-forest bg-forest px-4 py-2 text-center text-sm font-bold text-paper hover:border-pine hover:bg-pine sm:px-5;
+    @apply motion-safe:transition motion-safe:duration-300 motion-safe:ease-out motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-lg;
+  }
+  .button-secondary { @apply bg-transparent text-forest hover:bg-paper hover:text-pine; }
+  .button svg { @apply size-4 shrink-0; }
+  [dir="rtl"] .directional { transform: scaleX(-1); }
+  .hero-photo { background: linear-gradient(90deg, #091c14f2 3%, #091c14cc 36%, #091c143c 82%), url("./assets/restaurant-hero.webp") center 62% / cover, var(--color-pine); }
+  [dir="rtl"] .hero-photo { background-image: linear-gradient(270deg, #091c14fa 3%, #091c14d9 40%, #091c144f 95%), url("./assets/restaurant-hero.webp"); }
+  @media (max-width: 639px) {
+    .hero-photo, [dir="rtl"] .hero-photo { background-image: linear-gradient(180deg, #091c14d9 0%, #091c14e8 58%, #091c1480 100%), url("./assets/restaurant-hero.webp"); }
+  }
+  .hero-photo .eyebrow { @apply text-cream; }
+  .button.button-light, .header-order { @apply border-cream bg-cream text-forest hover:border-white hover:bg-white hover:text-pine; }
+  .button.button-ghost { @apply border-cream/65 bg-pine/25 text-paper hover:bg-pine; }
+  .header-order { @apply min-h-11 gap-1.5 px-2 text-xs sm:px-3 sm:text-sm; }
+  .cart-count { @apply min-w-5 rounded-full bg-forest px-1 text-center text-xs leading-5 text-paper; }
+
+  .signature, .page-section, .reservation-section, .site-footer { padding-block: clamp(42px, 6vw, 80px); }
+  .signature { @apply border-b border-line bg-paper; }
+  .section-heading { @apply mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 sm:mb-8; }
+  .section-heading h2 { @apply mt-2 text-forest; }
+  .text-link { @apply inline-flex min-h-11 items-center gap-2 text-sm font-bold text-forest underline decoration-line underline-offset-4 hover:decoration-current; }
+  .text-link svg { @apply size-4; }
+  .signature-grid { @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4; }
+  .signature-dish {
+    @apply block h-full overflow-hidden rounded-lg border border-line bg-cream;
+    @apply motion-safe:transition motion-safe:duration-300 motion-safe:ease-out motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-lg;
+  }
+  .special-image { @apply grid h-44 place-items-center bg-[#e7ede1] p-4 sm:h-48; }
+  .special-image img { @apply h-full max-h-36 w-full object-contain sm:max-h-40; }
+  .special-illustration img { @apply rounded-sm; }
+  .special-copy { @apply p-4 sm:p-5; }
+  .signature-dish h3 { @apply text-2xl leading-tight text-forest; }
+  .signature-dish p { @apply mt-1 text-sm leading-snug text-muted; }
+  .signature-dish p[lang="ar"] { @apply font-arabic; text-align: start; }
+  [dir="ltr"] .signature-dish p[lang="ar"] { text-align: left; }
+  .dish-number { @apply mb-2 block text-xs font-bold tracking-widest text-muted; }
+
+  .page-section h2 { @apply text-forest; }
+  .menu-intro { @apply mb-5 mt-2 text-muted; }
+  .menu-controls { @apply grid gap-4 rounded-lg border border-line bg-paper p-4 sm:p-6; }
+  .menu-search { @apply grid max-w-lg gap-1.5 text-sm font-semibold; }
+  .menu-search-row, .menu-filters { @apply flex flex-wrap gap-2; }
+  .menu-search input { @apply min-h-11 min-w-0 rounded-sm border border-muted/65 bg-white px-3 text-base font-normal; }
+  .menu-filter { @apply min-h-11 rounded-sm border border-muted/50 px-3 py-1.5 text-sm font-semibold motion-safe:transition-colors; }
+  .menu-filter:hover { @apply border-forest bg-cream; }
+  .menu-filter[aria-selected="true"] { @apply border-forest bg-forest text-paper; }
+  .menu-status { @apply mt-4 text-sm text-muted; }
+  .menu-category { @apply mt-4; }
+  .menu-category > h3 { @apply mb-3 text-3xl text-forest; }
+  .menu-items { @apply mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3; }
+  .menu-card, .menu-empty { @apply rounded-lg border border-line bg-paper p-4 text-start; overflow-wrap: anywhere; }
+  .menu-card { @apply motion-safe:transition motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-lg; }
+  .menu-card h4 { @apply font-display text-xl leading-tight text-forest; }
+  .menu-card p { @apply mt-1 text-sm text-muted; }
+  .menu-empty { @apply mt-3; }
+  .menu-heading-actions { @apply flex flex-wrap items-center gap-3; }
+  .price-note { @apply mb-5 mt-2 text-sm text-muted; }
+  .price-note .text-link { @apply min-h-0; }
+  .product-card { @apply flex flex-col overflow-hidden p-0; }
+  .product-image { @apply grid h-34 place-items-center bg-cream p-3; }
+  .product-image img { @apply h-full max-h-28 max-w-full object-contain; }
+  .product-copy { @apply flex grow flex-col p-4; }
+  .dish-name { @apply flex flex-wrap items-baseline gap-x-2 gap-y-0 text-lg leading-tight text-forest; }
+  .dish-name-ar { @apply font-arabic text-sm font-semibold; }
+  .product-actions { @apply mt-auto flex flex-wrap items-center justify-between gap-2 pt-4; }
+  .product-price { @apply text-sm text-forest; }
+  .add-dish { @apply min-h-10 px-2.5 text-xs; }
+  @media (prefers-reduced-motion: no-preference) {
+    .just-added { animation: added 360ms ease-out; }
+  }
+
+  .about-section { @apply border-y border-line bg-paper py-12 sm:py-18; }
+  .about-layout { @apply grid items-center gap-6 md:grid-cols-2 md:gap-12; }
+  .about-layout img { @apply mx-auto w-full max-w-92; }
+  .about-layout h2 { @apply mt-2 text-forest; }
+  .about-layout div > p:not(.eyebrow) { @apply my-4 max-w-[54ch] text-muted; }
+  .order-dialog { @apply fixed inset-0 m-auto max-h-[90vh] w-[min(94vw,35rem)] overflow-auto rounded-lg border border-line bg-paper p-5 text-ink shadow-xl sm:p-7; }
+  .order-dialog::backdrop { @apply bg-pine/70; }
+  .order-heading, .order-row { @apply flex items-center justify-between gap-3; }
+  .order-heading h2 { @apply text-3xl text-forest; }
+  .order-row { @apply border-b border-line py-3; }
+  .order-stepper { @apply flex shrink-0 items-center gap-2; }
+  .order-stepper button { @apply min-h-9 min-w-9 px-2; }
+
+  .reservation-section { @apply bg-forest text-paper; }
+  .reservation-layout { @apply grid items-start gap-7 md:grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] md:gap-12; }
+  .reservation-copy .eyebrow { @apply mb-3 text-cream/90; }
+  .reservation-copy p:not(.eyebrow) { @apply my-4 max-w-[38ch] text-cream/90; }
+  .reservation-phone { @apply inline-flex min-h-11 items-center gap-2 text-sm font-bold underline underline-offset-4; }
+  .guest-form { @apply min-w-0 rounded-lg border border-line bg-paper p-4 text-ink sm:p-6; }
+  .form-grid { @apply grid gap-3 min-[390px]:grid-cols-2; }
+  .form-grid label { @apply grid min-w-0 gap-1 text-sm font-semibold; }
+  .form-grid input, .form-grid select { @apply min-h-11 w-full min-w-0 rounded-sm border border-muted/65 bg-white px-2.5 py-1.5 text-base font-normal; }
+  .form-grid input[type="date"], .form-grid input[type="time"] { direction: ltr; }
+  .form-wide { @apply col-span-full; }
+  .form-trap, .form-message:empty { @apply hidden; }
+  .form-note, .form-message { @apply mt-3 text-sm text-muted; }
+  .form-message[data-error="true"] { color: #8a291e; }
+  .guest-form button { @apply mt-4; }
+
+  .birthday-section { @apply border-b border-line bg-paper; }
+  .birthday-layout { @apply grid items-start gap-7 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-12; }
+  .birthday-layout h2 { @apply mt-2; }
+  .birthday-layout div > p:not(.eyebrow) { @apply mt-3 text-muted; }
+  #table-status:empty { @apply hidden; }
+  .consent { @apply mt-4 flex items-start gap-2 text-sm; }
+  .consent input { @apply mt-1; }
+
+  .site-footer { @apply bg-pine text-paper; }
+  .footer-layout { @apply flex flex-wrap items-start justify-between gap-6; }
+  .delivery-links h3 { @apply mb-2 text-2xl; }
+  .site-footer h2 { @apply text-3xl sm:text-4xl; }
+  .site-footer address { @apply mt-2 not-italic text-cream/90; }
+  .contact-actions { @apply flex flex-wrap gap-2; }
+  .contact-actions a { @apply inline-flex min-h-11 flex-wrap items-center gap-1.5 rounded-sm border border-cream/40 px-3 text-sm font-semibold hover:bg-cream hover:text-pine motion-safe:transition-colors; }
+}
+
+@keyframes added {
+  50% { background: var(--color-forest); color: var(--color-paper); }
+}
+@media (max-width: 389px) {
+  .brand-mark { display: none; }
+  .brand-name { font-size: 1.55rem; }
+  .language-picker select { max-width: 86px; }
+}
